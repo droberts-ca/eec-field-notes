@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EEC Framework Field Notes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+            color: #2d3748;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .field-note {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .note-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .note-icon {
+            font-size: 2.5em;
+        }
+
+        .note-title h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .note-meta {
+            color: #718096;
+            font-size: 0.95em;
+        }
+
+        .context-box {
+            background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .context-box h3 {
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 1.2em;
+        }
+
+        .profile-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .profile-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .profile-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .profile-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .profile-table tr:nth-child(even) {
+            background: #f7fafc;
+        }
+
+        .section-title {
+            color: #2d3748;
+            font-size: 1.5em;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .eec-lens-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95em;
+        }
+
+        .eec-lens-table th {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .eec-lens-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+
+        .eec-lens-table tr:nth-child(even) {
+            background: #f0fff4;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fef5e7 0%, #fdebd0 100%);
+            border-left: 4px solid #f39c12;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box h3 {
+            color: #d68910;
+            margin-bottom: 12px;
+        }
+
+        .principles-list {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 25px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .principles-list h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .principles-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .principles-list li {
+            padding: 10px 0 10px 35px;
+            position: relative;
+            color: #1b5e20;
+        }
+
+        .principles-list li:before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+        }
+
+        .quote-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 4px solid #2196f3;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            font-style: italic;
+            color: #0d47a1;
+        }
+
+        .quote-box:before {
+            content: "💭";
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .documentation-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border: 2px solid #ff9800;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .documentation-box h3 {
+            color: #e65100;
+            margin-bottom: 12px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .field-note {
+                padding: 25px;
+            }
+            
+            .profile-table, .eec-lens-table {
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧩 EEC Framework Field Notes</h1>
+            <p>Complex Neurodevelopmental Profiles Through an Ecological Lens</p>
+        </div>
+
+        <!-- Field Note 1 -->
+        <div class="field-note">
+            <div class="note-header">
+                <div class="note-icon">🧩</div>
+                <div class="note-title">
+                    <h2>Field Note 1: Complex Neurodevelopmental Profile, Label Tension</h2>
+                    <div class="note-meta">Date: November 4, 2025 | School Psychologist, [Site Name Redacted]</div>
+                </div>
+            </div>
+
+            <div class="context-box">
+                <h3>Context</h3>
+                <p>Initial eligibility determination — Kindergarten student with complex neurodevelopmental profile (CAS, global delays, atypical sensory-motor profile); parent declined autism eligibility consideration.</p>
+            </div>
+
+            <h3 class="section-title">Summary</h3>
+            <p>A site psychologist independently applied the EEC framework to guide eligibility reasoning for a Kindergarten student presenting with:</p>
+            <ul style="margin: 15px 0 15px 30px;">
+                <li>Childhood apraxia of speech (CAS)</li>
+                <li>Global language and cognitive delays</li>
+                <li>Atypical sensory-motor behaviors and physical features</li>
+            </ul>
+            <p>The student showed intact joint attention and social reciprocity in highly structured, adult-facilitated contexts, suggesting that social success was heavily environment-mediated. Traditional categorical reasoning could have forced a debate over "which label fits best." EEC shifted the discussion toward functional access and environmental contingency.</p>
+
+            <h3 class="section-title">Student Profile (Summary Data)</h3>
+            <table class="profile-table">
+                <thead>
+                    <tr>
+                        <th>Domain</th>
+                        <th>Findings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Cognition</strong></td>
+                        <td>Below-average range; relative weaknesses in verbal comprehension, visual-spatial reasoning, and nonverbal reasoning.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Language</strong></td>
+                        <td>Significant receptive and expressive delays commensurate with cognitive level.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Speech</strong></td>
+                        <td>Childhood apraxia of speech with inconsistent sound production and difficulty with volitional sequencing.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Motor-Sensory</strong></td>
+                        <td>Atypical body movements, visual stimming, sensory-seeking behaviors.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Physical Features</strong></td>
+                        <td>High-arched palate, thin upper lip, tapered fingertips (narrow distally).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Social Communication</strong></td>
+                        <td>Relative strength in joint attention, social interest, and reciprocity within structured, familiar contexts.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Background</strong></td>
+                        <td>Limited preschool experience; home-based care prior to Kindergarten entry.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-box">
+                <h3>Traditional Eligibility Challenges</h3>
+                <ul style="margin-left: 20px;">
+                    <li>CAS does not account for global cognitive delays.</li>
+                    <li>Cognitive delays do not fully explain atypical sensory-motor features and physical characteristics.</li>
+                    <li>Autistic traits are present but do not clearly meet full criteria for autism eligibility.</li>
+                    <li>Social strengths appear highly scaffolded and adult-dependent, raising questions about generalization.</li>
+                    <li><strong>Risk:</strong> Team debate could fixate on label validity ("What fits best?") instead of functional access ("What supports are needed to participate in typical Kindergarten learning environments?").</li>
+                </ul>
+            </div>
+
+            <h3 class="section-title">EEC Reframe</h3>
+            <h4 style="color: #667eea; margin: 20px 0 10px 0;">Core Questions</h4>
+            <ul style="margin-left: 30px;">
+                <li>In which contexts does the student demonstrate adaptive functioning and participation, and in which does she not?</li>
+                <li>Which environmental variables predict success vs. struggle?</li>
+                <li>Is the observed profile categorical (consistent across contexts) or context-dependent (performance varies with environmental scaffolds)?</li>
+            </ul>
+
+            <h4 style="color: #48bb78; margin: 30px 0 15px 0;">Findings Through an EEC Lens</h4>
+            <table class="eec-lens-table">
+                <thead>
+                    <tr>
+                        <th>Domain</th>
+                        <th>Structured / Supported Context</th>
+                        <th>Less Structured / Naturalistic Context</th>
+                        <th>Environmental Variables</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Social Communication</strong></td>
+                        <td>Engages reciprocally with adults; responds to peer bids with facilitation</td>
+                        <td>Limited peer initiation; needs adult mediation</td>
+                        <td>Adult proximity, predictable routines, familiar partners</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Language Comprehension</strong></td>
+                        <td>Follows 1–2-step directions with visual/gestural cues</td>
+                        <td>Struggles with abstract or rapid language; reduced comprehension in group</td>
+                        <td>Visual scaffolds, reduced complexity, repetition</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Expressive Language</strong></td>
+                        <td>Uses short phrases to communicate basic intent with familiar adults</td>
+                        <td>Reduced intelligibility and formulation in less structured conversation</td>
+                        <td>Familiar partners, gesture support, modeling</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cognition / Problem-Solving</strong></td>
+                        <td>Completes simple visual-motor tasks with modeling</td>
+                        <td>Difficulty generalizing strategies to new tasks</td>
+                        <td>Task simplification, adult modeling</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sensory-Motor Regulation</strong></td>
+                        <td>Redirectable; tolerates structured sensory input</td>
+                        <td>Increased dysregulation when understimulated or overstimulated</td>
+                        <td>Sensory diet, co-regulation, predictable transitions</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-box">
+                <h3>Eligibility Decision</h3>
+                <p><strong>Primary Eligibility:</strong> Speech or Language Impairment (SLI) – addresses expressive/receptive and motor-speech needs.</p>
+                <p><strong>Secondary Consideration:</strong> Intellectual Disability (ID) – pending adaptive behavior data and criteria review.</p>
+                <p><strong>Autism:</strong> Features present but not clearly categorical; confounded by CAS and cognitive profile. Parent declined autism eligibility discussion at this time.</p>
+                <p style="margin-top: 15px;"><em>EEC allowed the team to make a present-tense, access-based decision (SLI) while explicitly documenting the complexity and uncertainty of the broader neurodevelopmental picture.</em></p>
+            </div>
+
+            <div class="documentation-box">
+                <h3>EEC Documentation (Protective Language)</h3>
+                <p>"From an ecological and context-dependent perspective, the student's developmental profile reflects an interaction between experiential factors (limited preschool exposure) and intrinsic neurodevelopmental differences. While structured environments currently support social and communication success, these strengths may not generalize to less scaffolded contexts. Observed features (CAS, cognitive delay, atypical sensory-motor behaviors, and physical characteristics) suggest possible underlying medical or genetic factors warranting further exploration. Current eligibility under Speech or Language Impairment provides access to necessary supports while allowing flexibility for future diagnostic clarification."</p>
+            </div>
+
+            <div class="principles-list">
+                <h3>Key EEC Principles Demonstrated</h3>
+                <ul>
+                    <li>Acknowledges complexity without over- or under-identifying.</li>
+                    <li>Documents environmental contingency for social communication success.</li>
+                    <li>Establishes a scaffolded baseline, not a fixed "trait profile."</li>
+                    <li>Protects future teams with clear re-evaluation triggers and rationales.</li>
+                    <li>Builds continuity between present need (SLI) and future developmental trajectory without locking the student into a premature category.</li>
+                </ul>
+            </div>
+
+            <div class="quote-box">
+                "EEC let me document the complexity without forcing a categorical label. The student gets services now, the parent feels respected, and the record already anticipates what might surface later."
+                <div style="text-align: right; margin-top: 10px; font-weight: bold;">— School Psychologist</div>
+            </div>
+        </div>
+
+        <!-- Field Note 2 -->
+        <div class="field-note">
+            <div class="note-header">
+                <div class="note-icon">🧩</div>
+                <div class="note-title">
+                    <h2>Field Note 2: "Average" Scores, Context-Dependent Communication</h2>
+                    <div class="note-meta">Date: October 2025 | ECAT Team (School Psychologist, SLP, Special Education Teacher, Nurse)</div>
+                </div>
+            </div>
+
+            <div class="context-box">
+                <h3>Context</h3>
+                <p>Initial multidisciplinary evaluation — 3-year-old preschool student with bilingual exposure (English/Spanish), outside autism diagnosis, and confirmed 1q21.1 microduplication. Standardized scores in the low-average range, but participation limited by context-dependent communication.</p>
+            </div>
+
+            <h3 class="section-title">Summary</h3>
+            <p>A preschool student with:</p>
+            <ul style="margin: 15px 0 15px 30px;">
+                <li>Medical/genetic diagnosis of 1q21.1 microduplication</li>
+                <li>Outside diagnosis of autism with accompanying language impairment</li>
+                <li>Bilingual exposure (English/Spanish)</li>
+            </ul>
+            <p>presented with low-average language and adaptive scores on standardized measures. However, ecological data (home, clinic, and classroom observations) revealed:</p>
+            <ul style="margin: 15px 0 15px 30px;">
+                <li>Reduced verbal initiation, especially with peers</li>
+                <li>Brief utterances and reliance on gestures</li>
+                <li>Strong dependence on adult modeling, visual supports, and predictable routines for successful participation</li>
+            </ul>
+            <p>Under a traditional, score-focused lens, the team might have concluded that the student did not qualify for services because "scores are in the average range." EEC reframed the case by asking whether her current communication allowed functional access to age-typical participation across environments.</p>
+
+            <h3 class="section-title">Student Profile (Summary Data)</h3>
+            <table class="profile-table">
+                <thead>
+                    <tr>
+                        <th>Domain</th>
+                        <th>Findings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Cognition</strong></td>
+                        <td>Borderline range on DAYC-2 (Cognitive SS = 77); strengths in visual matching, puzzles, and routine-based learning.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Language</strong></td>
+                        <td>DAYC-2 Communication SS = 83 (Receptive 81; Expressive 85). Uses short phrases; relies heavily on gestures and context.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Speech</strong></td>
+                        <td>Age-appropriate articulation and phonology for a multilingual learner; intelligible to familiar listeners in context.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Motor-Sensory</strong></td>
+                        <td>Periodic toe-walking; high sensory interest in hands-on play; benefits from sensory-rich, predictable activities.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Social Communication</strong></td>
+                        <td>Consistent eye contact, joint attention, and shared enjoyment with familiar adults; limited spontaneous peer initiation.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Adaptive / Socialization</strong></td>
+                        <td>Low-average adaptive skills; follows routines with support; needs prompts to manage transitions and complex directions.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Medical / Genetic</strong></td>
+                        <td>1q21.1 microduplication; outside diagnosis of Autism; no current acute or chronic health concerns impacting classroom participation.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-box">
+                <h3>Traditional Eligibility Challenge</h3>
+                <ul style="margin-left: 20px;">
+                    <li>Standardized language and adaptive scores fall in the low-average range.</li>
+                    <li>Autism features are subtle and inconsistently observed across tools (ADOS, CARS-2, clinical history).</li>
+                    <li>Strong nonverbal reciprocity and pretend play in structured assessment contexts.</li>
+                    <li><strong>Risk:</strong> team may document "average scores, mild concerns" and decline eligibility, overlooking the fact that communication is only functional under specific, high-support conditions.</li>
+                </ul>
+            </div>
+
+            <h3 class="section-title">EEC Reframe</h3>
+            <h4 style="color: #667eea; margin: 20px 0 10px 0;">Core Questions</h4>
+            <ul style="margin-left: 30px;">
+                <li>In which environments does this student participate as a full communication partner, and when does she withdraw or rely on gesture-only communication?</li>
+                <li>Which environmental variables (structure, adult proximity, visual cues, group size, linguistic complexity) determine whether she can access learning opportunities available to peers?</li>
+                <li>Are her "average" skills robust across contexts or conditional on scaffolding that is not guaranteed in typical preschool routines?</li>
+            </ul>
+
+            <h4 style="color: #48bb78; margin: 30px 0 15px 0;">Findings Through an EEC Lens</h4>
+            <table class="eec-lens-table">
+                <thead>
+                    <tr>
+                        <th>Domain</th>
+                        <th>Structured / Supported Context</th>
+                        <th>Less Structured / Naturalistic Context</th>
+                        <th>Environmental Variables</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Social Communication</strong></td>
+                        <td>Engages warmly with adults; frequent joint attention, shared smiles, and pretend play during 1:1 and small-group tasks.</td>
+                        <td>Rarely initiates peer interaction; responds with brief "yes/no" or silence; watches more than she joins.</td>
+                        <td>Adult modeling, small group size, consistent routines, low language demand.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Language Comprehension</strong></td>
+                        <td>Follows 1–2-step related directions with visual cues and familiar routines; responds to "where" and simple WH-questions.</td>
+                        <td>Difficulty with multi-step or unrelated directions; reduced response to more abstract questions in group settings.</td>
+                        <td>Visual supports, simplified syntax, repetition, slower pace.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Expressive Language</strong></td>
+                        <td>Uses 2–3 word phrases to request and comment with familiar partners ("I want juice," "my turn," "look Mommy").</td>
+                        <td>Limited spontaneous commentary; heavy reliance on pointing, nodding, and facial expressions; few initiations with peers.</td>
+                        <td>Familiar communication partners, scaffolded routines, time to respond.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cognition / Pre-Academic</strong></td>
+                        <td>Matches letters, numbers, shapes, and colors; completes puzzles; engages in pretend play when guided.</td>
+                        <td>Difficulty generalizing skills to new materials or activities without explicit modeling.</td>
+                        <td>Concrete materials, clear adult demonstrations, structured tasks.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sensory-Motor Regulation</strong></td>
+                        <td>Calm, engaged during predictable routines and sensory play (chalk, magnatiles, fine motor tasks).</td>
+                        <td>More likely to "space out" or disengage during open, busy, or noisy activities.</td>
+                        <td>Sensory-rich but structured activities, clear transitions, visual schedules.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-box">
+                <h3>Eligibility Decision</h3>
+                <p><strong>Primary Eligibility:</strong> Speech or Language Impairment (SLI), secondary to a functional communication delay.</p>
+                <p><strong>Autism:</strong> Outside diagnosis and genetic findings acknowledged; CARS-2 results in the "Minimal to No Signs of Autism" range during this evaluation.</p>
+                <p style="margin-top: 15px;"><strong>EEC Rationale:</strong> While standardized measures place language skills in the low-average range, ecological data show that communication is not yet sufficient to support independent participation in preschool communication demands (peer interaction, group tasks, and less scaffolded language).</p>
+            </div>
+
+            <div class="documentation-box">
+                <h3>EEC Documentation (Protective Language)</h3>
+                <p>"From an ecological and context-dependent perspective, the student's communicative and social abilities are strongly mediated by environmental structure and adult support. Although standardized scores fall within the low-average range, observational data demonstrate that participation and verbal initiation decrease significantly when scaffolds are reduced. These findings indicate that specialized instruction is required to generalize communication and participation skills across settings, consistent with IDEA's focus on access to age-typical learning opportunities."</p>
+            </div>
+
+            <div class="principles-list">
+                <h3>Key EEC Principles Demonstrated</h3>
+                <ul>
+                    <li>Shows that "average" scores can still mask access barriers when skills are context-bound.</li>
+                    <li>Reframes the question from "Is she delayed enough?" to "Can she access typical routines without specialized support?"</li>
+                    <li>Anchors eligibility to participation across environments, not percentile ranks.</li>
+                    <li>Uses non-deficit, protective language that respects outside diagnoses while focusing on current educational impact.</li>
+                    <li>Embeds a clear rationale for SDI: environmental scaffolds are not incidental supports; they are the specialized instruction that enables access.</li>
+                </ul>
+            </div>
+
+            <div class="quote-box">
+                "Without the EEC framing, this might have looked like 'mild language concerns, average scores—monitor only.' Seeing her as a context-dependent communicator made it clear that her current access depends on supports that won't automatically be present in every classroom or routine. Eligibility under SLI is less about a label and more about preserving the scaffolds that make her participation possible."
+                <div style="text-align: right; margin-top: 10px; font-weight: bold;">— ECAT Team</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
